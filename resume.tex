@@ -1,0 +1,360 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 0, 0} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+    pdftitle={John Doe's CV},
+    pdfauthor={John Doe},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% Some settings:
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column seperation
+\pagenumbering{gobble} % no page numbering
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for three column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+        \small\color{gray}\textit{Last updated in September 2024}\hspace{\widthof{Last updated in September 2024}}
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{$|$}
+
+    \begin{header}
+        \fontsize{25 pt}{25 pt}\selectfont 
+        \textbf{{\color{MidnightBlue} Akhil} Sudhakaran}
+
+        \vspace{3 pt}
+
+        \normalsize
+        \mbox{Bengaluru}%
+        \kern 3.0 pt%
+        \AND%
+        \kern 3.0 pt%
+        \mbox{ \hrefWithoutArrow{mailto:akhil.sudh@gmail.com}{akhil.sudh@gmail.com}}%
+        \kern 3.0 pt%
+        \AND%
+        \kern 3.0 pt%
+        \mbox{\hrefWithoutArrow{https://akhilsudh.github.io/}{akhilsudh.github.io}}%
+        \kern 3.0 pt%
+        \AND%
+        \kern 3.0 pt%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/akhilsudh/}{linkedin/akhilsudh}}%
+        \kern 3.0 pt%
+        \AND%
+        \kern 3.0 pt%
+        \mbox{\hrefWithoutArrow{https://github.com/akhilsudh}{github/akhilsudh}}%
+    \end{header}
+
+    \vspace{5 pt}
+
+    \section{Professional Summary}    
+        I am a senior software developer currently working at OpenText, Bengaluru. With over 6 years of working experience as an individual contributor, I offer technical expertise in designing, developing and maintaining scalable Java application microservices and interactive web user interfaces in React for the IT Operations Management (ITOM) suite. I have a proven track record of delivering software in an Agile based release cycle with high velocity and additionally have experience in handling live customer defect debugging and resolution.
+
+    \section{Work History}
+        
+        \begin{twocolentry}{
+            \textbf{Apr 2024 – Present}
+        }
+            {\textbf{{\color{MidnightBlue}Software Development Engineer III} | OpenText -- Bengaluru, India}}\end{twocolentry}
+
+        \vspace{0.20 cm}
+        \begin{onecolentry}
+            \textbf{Service Management Automation X (SMAX)}
+            \newline The SMAX platform manages IT Services, Assets and Enterprise services using system apps. It uses Java for backend and AngularJS for the WebUI. Currently \textbf{I am working in the platform team where we take ownership, design and implement backend features}.
+            \begin{highlights}
+                \item Worked on the image metadata redaction logic for the image upload service. Replaced a dependency on a 3rd party image library for custom image save \textbf{leading to reduced disk space consumption for tif images by 30\%}.
+                \item Added \textbf{Redis caching for API services to improve response time by reducing DB calls by 40\%}.
+                \item Designed and \textbf{created a Spring microservice}, that correlates Vulnerability and CVE data from Qualys data source with the vulnerable devices scanned by Server Automation (An OpenText ITOM solution).
+                \item \textbf{Implemented transaction management across microservices} involved in Vulnerability scan and remediation.
+                \item \textbf{Implemented Row Level Access Control (RLAC)} on the backend to enable user access control over specific rows of all entities in the DB based on predetermined rules set by the admin.
+                \item \textbf{Increased JUnit UT coverage from 40\% to over 80\%} across modules owned by Bangalore team.
+                \item Contributed in \textbf{over 50 code reviews per PI} and in \textbf{customer documentation for the product}.
+            \end{highlights}
+        \end{onecolentry}
+        
+        \vspace{0.20 cm}
+        \begin{onecolentry}
+            \textbf{Operations Orchestrator (OO)}
+            \newline OO is a workflow orchestrator that is based on Java backend for the orchestration engine and React for the UI and workflow designer web tool. \textbf{I Worked with the OO team to deliver UI features on OO Designer} (A Cloudslang \& AFL workflow creation tool).
+            \begin{highlights}
+                \item Implemented \textbf{drag and drop functionality} for workflow items directly on the web UI using \textbf{React, Redux \& mxGraph}, effectively \textbf{improving workflow creation speed by 100\%}.
+                \item Developed \textbf{real-time workflow validation} on importing/authoring workflows on the web UI or by Git changes.
+                \item Created \textbf{UI test automation using Selenium, reducing manual test efforts by 5 story points per sprint and increasing QA efficiency by 50\%} and contributed in defect fixing and product documentation.
+            \end{highlights}
+        \end{onecolentry}
+
+
+        \vspace{0.5 cm}
+
+        \begin{twocolentry}{
+            \textbf{Sep 2021 – Mar 2024}
+        }
+            {\textbf{{\color{MidnightBlue}Software Development Engineer II} |  OpenText -- Bengaluru, India}}\end{twocolentry}
+        \vspace{0.20 cm}
+        \begin{onecolentry}
+            \textbf{Database and Middleware Automation (DMA)}
+            \newline DMA automates deploying, managing and patching DB and Middleware applications thorough workflows. I worked in the DMA platform team, where I was responsible for \textbf{modernizing the legacy code base}.
+            \begin{highlights}
+                \item \textbf{Upgraded the platform code from Java 8 to Java 11}, improved the encryption logic from AES to PKCS-GCM for workflow data and fixed other security defects.
+                \item \textbf{Removed dependency on deprecated Jython interpreter by upgrading to python 3} for the workflow execution engine and \textbf{rewrote the workflows in python 3}.
+                \item Replaced \textbf{Adobe Flash for UI elements to use charts.js} (A modern Javascript based charting library) \textbf{increasing dashboard responsiveness by a 100\%}.
+                \item \textbf{Fixed over 20 defects from the backlog}, engaged in several customer facing defect resolution calls and contributed in comprehensive upgrade documentation.
+            \end{highlights}
+        \end{onecolentry}
+
+         \vspace{0.20 cm}
+        \begin{onecolentry}
+            \textbf{Data Center Automation (DCA)}
+            \newline DCA is a standalone application that automates vulnerability and compliance scan for private cloud data centers.
+            \begin{highlights}
+                \item \textbf{Optimized memory resource allocation} for report queries \textbf{from 2GB to 100MB} on Vertica DB
+                \item Worked on the backend code for \textbf{internationalization and localization platform features}.
+                \item Wrote \textbf{scripts to import patching data from WSUS and RedHat Satellite} for DCA patch scan capability.
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.5 cm}
+
+        \begin{twocolentry}{
+            \textbf{Aug 2018 – Aug 2021}
+        }
+            {\textbf{{\color{MidnightBlue}Software Development Engineer I} |  Micro Focus -- Bengaluru, India}}\end{twocolentry}
+        \vspace{0.10 cm}
+
+        \vspace{0.10 cm}
+         \begin{onecolentry}
+            \begin{highlights}
+                \item Worked on features for a \textbf{multithreaded java application} called dataminer for extracting, transforming and loading data (ETL) from the Server automation platform DB to the in house reporting solution (OPTIC DL).
+                \item Took ownership of OO content pack for Server Automation and worked on it's features and security defects.
+                \item Wrote Ansible playbooks for deploying dataminer on SA as an \textbf{RnD efficiency item}.
+                \item Responsible for \textbf{converting Python2 code in vulnerability content to Python3} as part of modernizing the code.
+                \item Worked with the content team to \textbf{deliver vulnerability and compliance content in OVAL format}.
+                \item Created \textbf{automation in python using the in-house AXIS framework} for content testing and deploying.
+            \end{highlights}
+        \end{onecolentry}
+
+    \section{Technologies}    
+        \begin{onecolentry}
+            \textbf{Languages:} Java, Python, SQL, Javascript/Typescript, HTML/CSS, shell scripting
+        \end{onecolentry}
+        \begin{onecolentry}
+            \textbf{Frameworks:} SpringBoot, Hibernate, Junit, React, PyTest, Selenium
+        \end{onecolentry}
+        \begin{onecolentry}
+            \textbf{Miscellaneous:} Git, Maven, Postgres, Vertica, Redis, SAFe® Agile, RabbitMQ, Microservices, Jenkins, Docker, Kubernetes, AWS, Linux, Windows, WSL
+        \end{onecolentry}
+
+    \section{Education}        
+        \begin{twocolentry}{
+            \textbf{2021 – 2023}
+        }
+            \textbf{{\color{MidnightBlue}Birla Institute of Technology, Pilani}, MTech in System Software}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item \textbf{CGPA:} 9.24
+                \item \textbf{Related Coursework:} Distributed Computing, Mathematical Foundations for Data Science, Advanced Statistics, Applied Machine Learning, Deep Learning, Natural Language Processing.
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.50 cm}
+
+        \begin{twocolentry}{
+            \textbf{2014 – 2018}
+        }
+            \textbf{{\color{MidnightBlue}Sir M. Visvesvaraya Institute of Technology, Bengaluru}, BE in Computer Science}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item \textbf{Grade:} 80.5%
+                \item \textbf{Related Coursework:} Object Oriented programming with Java, Pattern Recognition, Artificial Intelligence, Network Security, Software Testing, Unix system programming.  
+            \end{highlights}
+        \end{onecolentry}
+
+    \section{Achievements and Publications}
+        \begin{highlights}        
+        \item Awarded one of the \textbf{best RnD teams in Bangalore} for the year 2023-2024.
+        \item One among the \textbf{top 10\% of my class in BITS Pilani} for the MTech batch of 2021-23.
+        \item Recognized for innovations done as part of my contributions in inno weeks.
+        \item \textbf{SAFe® Certified} Agile Developer 2018
+        \item \textbf{Awarded gold medal for being the top 5\%} of FCD holders of Sir. M Visvesvaraya Institute of Technology, Bengaluru for the BE batch of 2014-18
+        \item \begin{samepage}
+            \begin{twocolentry}{
+                \textbf{Jun 2018}
+            }
+                \textbf{A Hybrid Approach to Social Network User Feed Generation}
+            \end{twocolentry}
+
+            \vspace{0.10 cm}
+            
+            \begin{onecolentry}
+                \mbox{\textbf{\textit{Akhil Sudhakaran}}}, \mbox{Devipriya Sarkar}, \mbox{Praveen Kumar G}, \mbox{Ravikiran R}
+
+                \vspace{0.10 cm}
+                
+        \href{https://doi.org/10.5120/ijca2018917224}{10.5120/ijca2018917224}
+        \end{onecolentry}
+        \end{samepage}
+        \item \begin{samepage}
+            \begin{twocolentry}{
+                \textbf{Jul 2017}
+            }
+                \textbf{A Novel Double Backtracking Approach to the
+ N-Queens Problem in Three Dimensions}
+            \end{twocolentry}
+
+            \vspace{0.10 cm}
+            
+            \begin{onecolentry}
+                \mbox{Abhijith Chakiat}, \mbox{\textbf{\textit{Akhil Sudhakaran}}}, \mbox{Abhinav A. Nair}, \mbox{Pallavi Venkatesh}
+
+                \vspace{0.10 cm}
+                
+        \href{https://doi.org/10.5120/ijca2017914749}{10.5120/ijca2017914749}
+        \end{onecolentry}
+        \end{samepage}
+        \end{highlights}
+\end{document}
